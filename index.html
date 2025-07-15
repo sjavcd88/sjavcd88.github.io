@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WailiDevs | بناء مستقبل التطبيقات</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Tajawal -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+
+    <!-- Custom Styles with Advanced Animations & Theming -->
+    <style>
+        :root {
+            /* Light Mode Colors */
+            --bg-primary: #f8f9fa; /* A very light gray */
+            --bg-secondary: #ffffff;
+            --text-primary: #212529;
+            --text-secondary: #6c757d;
+            --color-accent-start: #4f46e5; /* Indigo 600 */
+            --color-accent-end: #0ea5e9; /* Sky 500 */
+            --border-color: #e9ecef;
+        }
+
+        html.dark {
+            /* Dark Mode Colors */
+            --bg-primary: #0d1117; /* GitHub Dark */
+            --bg-secondary: #161b22;
+            --text-primary: #e6edf3;
+            --text-secondary: #8b949e;
+            --color-accent-start: #58a6ff; /* GitHub Blue */
+            --color-accent-end: #1f6feb;
+            --border-color: #30363d;
+        }
+
+        body {
+            font-family: 'Tajawal', sans-serif;
+            scroll-behavior: smooth;
+            overflow-x: hidden;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            transition: background-color 0.4s, color 0.4s;
+        }
+        
+        .gradient-text {
+            background: linear-gradient(90deg, var(--color-accent-start), var(--color-accent-end));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .gradient-button {
+            background-image: linear-gradient(to right, var(--color-accent-start) 0%, var(--color-accent-end) 51%, var(--color-accent-start) 100%);
+            background-size: 200% auto;
+            transition: background-position 0.5s;
+        }
+        .gradient-button:hover {
+            background-position: right center;
+        }
+
+        .card-hover-effect {
+            transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        .card-hover-effect:hover {
+            transform: translateY(-15px);
+            box-shadow: 0 30px 50px -20px rgba(0, 0, 0, 0.25);
+        }
+
+        .social-icon-circle {
+            background-color: var(--bg-primary);
+            border: 2px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+        .social-icon-circle:hover {
+            transform: scale(1.15) rotate(5deg);
+            border-color: var(--color-accent-start);
+            color: var(--color-accent-start);
+        }
+        
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        .animate-on-scroll.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .loader {
+            border: 4px solid rgba(255,255,255,0.3);
+            border-top: 4px solid var(--color-accent-start);
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Header & Navigation Bar -->
+    <header id="header" class="bg-white/80 dark:bg-gray-900/80 backdrop-blur-lg shadow-lg sticky top-0 z-50 transition-all duration-300">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="#home" class="text-3xl font-black gradient-text">WailiDevs</a>
+            
+            <div class="hidden md:flex items-center space-x-8 lg:space-x-10">
+                <a href="#home" class="text-[var(--text-primary)] font-bold transition-colors duration-300 hover:gradient-text">الرئيسية</a>
+                <a href="#services" class="text-[var(--text-primary)] font-bold transition-colors duration-300 hover:gradient-text">خدماتنا</a>
+                <a href="#ideas" class="text-[var(--text-primary)] font-bold transition-colors duration-300 hover:gradient-text">مولّد الأفكار</a>
+                <a href="#tech-stack" class="text-[var(--text-primary)] font-bold transition-colors duration-300 hover:gradient-text">مرشح التقنيات</a>
+                <a href="#portfolio" class="text-[var(--text-primary)] font-bold transition-colors duration-300 hover:gradient-text">أعمالنا</a>
+                <a href="#about" class="text-[var(--text-primary)] font-bold transition-colors duration-300 hover:gradient-text">من نحن</a>
+            </div>
+            
+            <div class="hidden md:flex items-center gap-4">
+                <button id="theme-toggle" class="p-2 rounded-full text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all duration-300">
+                    <svg id="theme-toggle-dark-icon" class="w-6 h-6 hidden" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+                    <svg id="theme-toggle-light-icon" class="w-6 h-6 hidden" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm-.707 7.072l.707-.707a1 1 0 10-1.414-1.414l-.707.707a1 1 0 001.414 1.414zM3 11a1 1 0 100-2H2a1 1 0 100 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path></svg>
+                </button>
+                <a href="#contact" class="gradient-button text-white font-bold py-3 px-8 rounded-full shadow-lg transform hover:scale-105">تواصل معنا</a>
+            </div>
+
+            <div class="md:hidden flex items-center">
+                 <button id="theme-toggle-mobile" class="p-2 rounded-full text-gray-600 dark:text-gray-300 mr-2"><svg id="theme-toggle-dark-icon-mobile" class="w-6 h-6 hidden" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg><svg id="theme-toggle-light-icon-mobile" class="w-6 h-6 hidden" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm-.707 7.072l.707-.707a1 1 0 10-1.414-1.414l-.707.707a1 1 0 001.414 1.414zM3 11a1 1 0 100-2H2a1 1 0 100 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path></svg></button>
+                <button id="mobile-menu-button" class="text-[var(--text-primary)] focus:outline-none"><svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg></button>
+            </div>
+        </nav>
+        <div id="mobile-menu" class="hidden md:hidden bg-[var(--bg-secondary)] py-4 shadow-xl"><a href="#home" class="block text-center py-3 px-4 text-[var(--text-primary)] hover:bg-[var(--bg-accent)] font-semibold">الرئيسية</a><a href="#services" class="block text-center py-3 px-4 text-[var(--text-primary)] hover:bg-[var(--bg-accent)] font-semibold">خدماتنا</a><a href="#ideas" class="block text-center py-3 px-4 text-[var(--text-primary)] hover:bg-[var(--bg-accent)] font-semibold">مولّد الأفكار</a><a href="#tech-stack" class="block text-center py-3 px-4 text-[var(--text-primary)] hover:bg-[var(--bg-accent)] font-semibold">مرشح التقنيات</a><a href="#portfolio" class="block text-center py-3 px-4 text-[var(--text-primary)] hover:bg-[var(--bg-accent)] font-semibold">أعمالنا</a><a href="#about" class="block text-center py-3 px-4 text-[var(--text-primary)] hover:bg-[var(--bg-accent)] font-semibold">من نحن</a><div class="mt-4 px-6"><a href="#contact" class="block w-full text-center gradient-button text-white font-bold py-3 px-6 rounded-full">تواصل معنا</a></div></div>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section id="home" class="relative min-h-screen flex items-center justify-center text-white text-center bg-cover bg-center bg-fixed" style="background-image: url('https://images.unsplash.com/photo-1521737604893-d14cc237f11d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1784&q=80');">
+            <div class="absolute inset-0 bg-gradient-to-b from-black/80 to-black/60"></div>
+            <div class="relative z-10 container mx-auto px-6">
+                <h1 class="text-4xl md:text-6xl lg:text-7xl font-black leading-tight mb-4 animate-on-scroll">نحوّل أفكارك إلى تطبيقات أندرويد استثنائية</h1>
+                <p class="text-lg md:text-xl max-w-3xl mx-auto mb-8 text-gray-200 animate-on-scroll" style="transition-delay: 200ms;">نحن سجاد وأزهر الوائلي. فريق من المطورين الشغوفين، نجمع بين الكود المتقن والتصميم المبتكر لنبني تطبيقات سريعة، آمنة، ومصممة خصيصًا للنجاح على متجر Google Play.</p>
+                <div class="flex flex-col sm:flex-row justify-center items-center gap-4 animate-on-scroll" style="transition-delay: 400ms;"><a href="#portfolio" class="gradient-button text-white font-bold py-4 px-10 rounded-full shadow-xl text-lg transform hover:scale-105">استكشف أعمالنا</a><a href="#contact" class="bg-gray-100 text-gray-800 font-bold py-4 px-10 rounded-full hover:bg-gray-200 shadow-xl transition-all duration-300 text-lg transform hover:scale-105">ناقش مشروعك</a></div>
+            </div>
+        </section>
+
+        <!-- Services Section -->
+        <section id="services" class="py-24 bg-[var(--bg-secondary)]">
+            <div class="container mx-auto px-6 text-center">
+                <div class="animate-on-scroll"><h2 class="text-4xl md:text-5xl font-black mb-4"><span class="gradient-text">حلول متكاملة</span> لتطبيقات الأندرويد</h2><p class="text-lg text-[var(--text-secondary)] max-w-3xl mx-auto mb-16">من الفكرة الأولية إلى الإطلاق وما بعده، نقدم مجموعة من الخدمات الاحترافية التي تغطي كافة مراحل دورة حياة التطبيق.</p></div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <div class="card-hover-effect bg-[var(--bg-primary)] p-8 rounded-2xl shadow-lg transition-all duration-300 animate-on-scroll" style="transition-delay: 100ms;"><div class="bg-gradient-to-br from-blue-100 to-indigo-100 dark:from-gray-800 dark:to-slate-800 text-[var(--color-accent-start)] rounded-2xl w-20 h-20 flex items-center justify-center mx-auto mb-6 shadow-inner"><svg class="w-10 h-10" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M15.5 8.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Zm-7 0a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3ZM19 12h-2.28a5.16 5.16 0 0 0-9.44 0H5a1 1 0 0 0-1 1v5a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-5a1 1 0 0 0-1-1Zm-5.12 4.12L12 17l-1.88-.88A3.15 3.15 0 0 1 8.28 13H15.72a3.15 3.15 0 0 1-1.84 3.12Z"/></svg></div><h3 class="text-xl font-bold mb-2">تطوير تطبيقات Native</h3><p class="text-[var(--text-secondary)]">بناء تطبيقات فائقة الأداء باستخدام Kotlin و Java وأحدث أدوات جوجل لضمان أفضل توافق وسرعة.</p></div>
+                    <div class="card-hover-effect bg-[var(--bg-primary)] p-8 rounded-2xl shadow-lg transition-all duration-300 animate-on-scroll" style="transition-delay: 200ms;"><div class="bg-gradient-to-br from-blue-100 to-indigo-100 dark:from-gray-800 dark:to-slate-800 text-[var(--color-accent-start)] rounded-2xl w-20 h-20 flex items-center justify-center mx-auto mb-6 shadow-inner"><svg class="w-10 h-10" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M21.78 6.22a.75.75 0 0 0-1.06 0l-2.47 2.47a7.49 7.49 0 0 0-8.99-.45L3.53 14a.75.75 0 0 0 1.06 1.06l5.73-5.73a7.5 7.5 0 0 0 5.44 5.44l-5.73 5.73a.75.75 0 0 0 1.06 1.06l5.73-5.73a7.49 7.49 0 0 0-.45-8.99l2.47-2.47a.75.75 0 0 0 0-1.06Z"/></svg></div><h3 class="text-xl font-bold mb-2">تصميم UI/UX</h3><p class="text-[var(--text-secondary)]">نحول الأفكار المعقدة لتصميمات بسيطة وأنيقة، مع التركيز على تجربة مستخدم سلسة وممتعة.</p></div>
+                    <div class="card-hover-effect bg-[var(--bg-primary)] p-8 rounded-2xl shadow-lg transition-all duration-300 animate-on-scroll" style="transition-delay: 300ms;"><div class="bg-gradient-to-br from-blue-100 to-indigo-100 dark:from-gray-800 dark:to-slate-800 text-[var(--color-accent-start)] rounded-2xl w-20 h-20 flex items-center justify-center mx-auto mb-6 shadow-inner"><svg class="w-10 h-10" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 11.5a5.5 5.5 0 0 0-10.85 1.03A4.5 4.5 0 0 0 11 20h6.5a4.5 4.5 0 0 0 .02-9A5.5 5.5 0 0 0 17.5 11.5Z"/></svg></div><h3 class="text-xl font-bold mb-2">ربط خدمات API</h3><p class="text-[var(--text-secondary)]">نضمن تدفق بيانات سلس وآمن بين تطبيقك والخوادم، مع خبرة في ربط قواعد البيانات.</p></div>
+                    <div class="card-hover-effect bg-[var(--bg-primary)] p-8 rounded-2xl shadow-lg transition-all duration-300 animate-on-scroll" style="transition-delay: 400ms;"><div class="bg-gradient-to-br from-blue-100 to-indigo-100 dark:from-gray-800 dark:to-slate-800 text-[var(--color-accent-start)] rounded-2xl w-20 h-20 flex items-center justify-center mx-auto mb-6 shadow-inner"><svg class="w-10 h-10" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M17.8 8.4a.75.75 0 0 0-1.06-1.06l-2.24 2.24a5.98 5.98 0 0 0-3.3-1.04H11V6.5a2.5 2.5 0 0 0-5 0v1.14a5.98 5.98 0 0 0-3.3 1.04L.46 6.44a.75.75 0 0 0-1.06 1.06l2.24 2.24a6 6 0 0 0 0 8.52l-2.24 2.24a.75.75 0 1 0 1.06 1.06l2.24-2.24a5.98 5.98 0 0 0 3.3 1.04V21.5a2.5 2.5 0 0 0 5 0v-1.14a5.98 5.98 0 0 0 3.3-1.04l2.24 2.24a.75.75 0 1 0 1.06-1.06l-2.24-2.24a6 6 0 0 0 0-8.52l2.24-2.24ZM8.5 15a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Z" clip-rule="evenodd"/></svg></div><h3 class="text-xl font-bold mb-2">الصيانة والدعم</h3><p class="text-[var(--text-secondary)]">نقدم خطط صيانة وتحديثات دورية لضمان عمل تطبيقك بكفاءة وأمان مع كل إصدار جديد.</p></div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- App Idea Generator Section -->
+        <section id="ideas" class="py-24 bg-[var(--bg-primary)]">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-12 animate-on-scroll"><h2 class="text-4xl md:text-5xl font-black mb-4">✨ <span class="gradient-text">مولّد أفكار التطبيقات</span></h2><p class="text-lg text-[var(--text-secondary)] max-w-3xl mx-auto">هل تبحث عن إلهام لمشروعك القادم؟ أدخل كلمة مفتاحية ودع الذكاء الاصطناعي يقترح عليك أفكارًا مبتكرة.</p></div>
+                <div class="max-w-2xl mx-auto animate-on-scroll" style="transition-delay: 200ms;">
+                    <div class="flex flex-col sm:flex-row gap-4 mb-8"><input type="text" id="idea-keyword" class="flex-grow bg-[var(--bg-secondary)] border-2 border-[var(--border-color)] text-[var(--text-primary)] text-lg rounded-full focus:ring-2 focus:ring-[var(--color-accent-end)] focus:border-[var(--color-accent-end)] block w-full p-4 transition-all duration-300" placeholder="مثال: صحة، تعليم، سفر..."><button id="generate-ideas-button" class="gradient-button text-white font-bold py-4 px-10 rounded-full shadow-lg text-lg transform hover:scale-105 flex items-center justify-center gap-2"><span id="idea-button-text">ولّد أفكار</span><div id="idea-loader" class="loader hidden"></div></button></div>
+                    <p id="idea-error" class="text-red-500 text-sm mt-2 text-center hidden"></p>
+                    <div id="ideas-output" class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tech Stack Recommender Section -->
+        <section id="tech-stack" class="py-24 bg-[var(--bg-secondary)]">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-12 animate-on-scroll"><h2 class="text-4xl md:text-5xl font-black mb-4">✨ <span class="gradient-text">مُرشِّح التقنيات</span></h2><p class="text-lg text-[var(--text-secondary)] max-w-3xl mx-auto">هل لديك فكرة ولا تعرف من أين تبدأ؟ صف فكرتك هنا، وسيقوم الذكاء الاصطناعي بترشيح أفضل التقنيات لبنائها.</p></div>
+                <div class="max-w-3xl mx-auto animate-on-scroll" style="transition-delay: 200ms;">
+                    <div class="bg-[var(--bg-primary)] p-6 rounded-2xl shadow-lg">
+                        <textarea id="tech-description" rows="4" class="bg-[var(--bg-secondary)] border-2 border-[var(--border-color)] text-[var(--text-primary)] text-md rounded-xl focus:ring-2 focus:ring-[var(--color-accent-end)] focus:border-[var(--color-accent-end)] block w-full p-4 transition-all duration-300" placeholder="صف فكرة تطبيقك هنا..."></textarea>
+                        <button id="get-stack-button" class="gradient-button w-full mt-4 text-white font-bold py-4 px-10 rounded-full shadow-lg text-lg transform hover:scale-105 flex items-center justify-center gap-2">
+                            <span id="stack-button-text">رشِّح لي التقنيات</span>
+                            <div id="stack-loader" class="loader hidden"></div>
+                        </button>
+                    </div>
+                    <p id="stack-error" class="text-red-500 text-sm mt-4 text-center hidden"></p>
+                    <div id="stack-output" class="mt-8">
+                        <!-- Recommended stack will be injected here -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Portfolio Section -->
+        <section id="portfolio" class="py-24 bg-[var(--bg-primary)]">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-16 animate-on-scroll"><h2 class="text-4xl md:text-5xl font-black mb-4"><span class="gradient-text">معرض أعمالنا</span>: تطبيقات تركت بصمتها</h2><p class="text-lg text-[var(--text-secondary)] max-w-3xl mx-auto">نفخر بما أنجزناه. هذه مجموعة من المشاريع التي قمنا بتطويرها ونشرها بنجاح، كل تطبيق يحمل قصة نجاح فريدة.</p></div>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+                    <div class="card-hover-effect bg-[var(--bg-secondary)] rounded-2xl shadow-xl overflow-hidden transition-all duration-300 animate-on-scroll" style="transition-delay: 100ms;"><img src="https://i.imgur.com/nL9T3yG.jpeg" alt="تطبيق احسب عمرك" class="w-full h-60 object-cover transition-transform duration-300"><div class="p-6"><h3 class="text-2xl font-bold mb-2">احسب عمرك</h3><p class="text-[var(--text-secondary)] mb-4">أداة بسيطة وأنيقة تمكن المستخدم من حساب عمره بدقة بالسنوات والأشهر والأيام.</p><a href="#" class="font-bold text-[var(--color-accent-start)] hover:underline">شاهد المشروع ←</a></div></div>
+                    <div class="card-hover-effect bg-[var(--bg-secondary)] rounded-2xl shadow-xl overflow-hidden transition-all duration-300 animate-on-scroll" style="transition-delay: 200ms;"><img src="https://i.imgur.com/qE4J3iK.jpeg" alt="تطبيق ادارة الحسابات" class="w-full h-60 object-cover transition-transform duration-300"><div class="p-6"><h3 class="text-2xl font-bold mb-2">إدارة الحسابات الإلكترونية</h3><p class="text-[var(--text-secondary)] mb-4">تطبيق آمن وموثوق لحفظ وإدارة جميع حساباتك وكلمات المرور في مكان واحد مشفر.</p><a href="#" class="font-bold text-[var(--color-accent-start)] hover:underline">شاهد المشروع ←</a></div></div>
+                    <div class="card-hover-effect bg-[var(--bg-secondary)] rounded-2xl shadow-xl overflow-hidden transition-all duration-300 animate-on-scroll" style="transition-delay: 300ms;"><img src="https://i.imgur.com/2U5G9Bq.jpeg" alt="تطبيق الكتب الابتدائية" class="w-full h-60 object-cover transition-transform duration-300"><div class="p-6"><h3 class="text-2xl font-bold mb-2">الكتب الإبتدائية</h3><p class="text-[var(--text-secondary)] mb-4">مكتبة رقمية شاملة توفر جميع كتب المناهج الدراسية للمرحلة الابتدائية، لتسهيل الوصول إليها.</p><a href="#" class="font-bold text-[var(--color-accent-start)] hover:underline">شاهد المشروع ←</a></div></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Us Section -->
+        <section id="about" class="py-24 bg-[var(--bg-secondary)]">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-16 animate-on-scroll"><h2 class="text-4xl md:text-5xl font-black mb-4"><span class="gradient-text">تعرف على الفريق</span> خلف الشاشة</h2><p class="text-lg text-[var(--text-secondary)] max-w-3xl mx-auto">نحن أكثر من مجرد مبرمجين، نحن شركاؤك في النجاح الرقمي. يجمعنا شغف مشترك بالتكنولوجيا والالتزام بتقديم قيمة حقيقية.</p></div>
+                <div class="flex flex-wrap justify-center items-stretch gap-10">
+                    <div class="card-hover-effect bg-[var(--bg-primary)] rounded-2xl shadow-xl p-8 text-center max-w-sm w-full animate-on-scroll" style="transition-delay: 100ms;">
+                        <img src="https://i.imgur.com/uXgYf4a.jpeg" alt="سجاد قيصر الوائلي" class="w-40 h-40 rounded-full mx-auto mb-6 border-4 border-[var(--color-accent-end)] shadow-lg object-cover">
+                        <h3 class="text-2xl font-bold">سجاد قيصر الوائلي</h3><p class="font-semibold mb-4 text-[var(--color-accent-start)]">مهندس الواجهات الخلفية وهيكلة التطبيقات</p><p class="text-[var(--text-secondary)] mb-6">"أركز على بناء أساس قوي ومتين لكل تطبيق، أؤمن بأن الأداء العالي والأمان هما العمود الفقري لأي مشروع ناجح."</p>
+                        <div class="flex justify-center items-center space-x-4 rtl:space-x-reverse">
+                            <a href="https://www.instagram.com/o9cc0/" target="_blank" class="w-12 h-12 rounded-full flex items-center justify-center social-icon-circle"><svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.85s-.011 3.584-.069 4.85c-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07s-3.584-.012-4.85-.07c-3.252-.148-4.771-1.691-4.919-4.919-.058-1.265-.069-1.645-.069-4.85s.011-3.584.069-4.85c.149-3.225 1.664-4.771 4.919-4.919C8.416 2.175 8.796 2.163 12 2.163m0-2.163C8.74 0 8.333.011 7.053.072 2.695.272.273 2.69.073 7.052.012 8.333 0 8.74 0 12s.012 3.667.072 4.947c.2 4.358 2.618 6.78 6.98 6.98C8.333 23.988 8.74 24 12 24s3.667-.012 4.947-.072c4.358-.2 6.78-2.618 6.98-6.98C23.988 15.667 24 15.26 24 12s-.012-3.667-.072-4.947c-.2-4.358-2.618-6.78-6.98-6.98C15.667.012 15.26 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.88 1.44 1.44 0 0 0 0-2.88z"/></svg></a>
+                            <a href="#" class="w-12 h-12 rounded-full flex items-center justify-center social-icon-circle"><svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg></a>
+                            <a href="#" class="w-12 h-12 rounded-full flex items-center justify-center social-icon-circle"><svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg></a>
+                        </div>
+                    </div>
+                    <div class="card-hover-effect bg-[var(--bg-secondary)] rounded-2xl shadow-xl p-8 text-center max-w-sm w-full animate-on-scroll" style="transition-delay: 200ms;">
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=387&q=80" alt="أزهر الوائلي" class="w-40 h-40 rounded-full mx-auto mb-6 border-4 border-[var(--color-accent-end)] shadow-lg object-cover">
+                        <h3 class="text-2xl font-bold">أزهر الوائلي</h3><p class="font-semibold mb-4 text-[var(--color-accent-start)]">خبير تصميم وتجربة المستخدم</p><p class="text-[var(--text-secondary)] mb-6">"مهمتي هي تصميم جسر سلس بين المستخدم والتكنولوجيا. أسعى لتحقيق التوازن المثالي بين الجمال البصري وسهولة الاستخدام الفائقة."</p>
+                        <div class="flex justify-center items-center space-x-4 rtl:space-x-reverse">
+                            <a href="https://www.instagram.com/azhar.alwaely/" target="_blank" class="w-12 h-12 rounded-full flex items-center justify-center social-icon-circle"><svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.85s-.011 3.584-.069 4.85c-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07s-3.584-.012-4.85-.07c-3.252-.148-4.771-1.691-4.919-4.919-.058-1.265-.069-1.645-.069-4.85s.011-3.584.069-4.85c.149-3.225 1.664-4.771 4.919-4.919C8.416 2.175 8.796 2.163 12 2.163m0-2.163C8.74 0 8.333.011 7.053.072 2.695.272.273 2.69.073 7.052.012 8.333 0 8.74 0 12s.012 3.667.072 4.947c.2 4.358 2.618 6.78 6.98 6.98C8.333 23.988 8.74 24 12 24s3.667-.012 4.947-.072c4.358-.2 6.78-2.618 6.98-6.98C23.988 15.667 24 15.26 24 12s-.012-3.667-.072-4.947c-.2-4.358-2.618-6.78-6.98-6.98C15.667.012 15.26 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.88 1.44 1.44 0 0 0 0-2.88z"/></svg></a>
+                            <a href="#" class="w-12 h-12 rounded-full flex items-center justify-center social-icon-circle"><svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg></a>
+                            <a href="#" class="w-12 h-12 rounded-full flex items-center justify-center social-icon-circle"><svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="py-24 bg-[var(--bg-primary)]">
+            <div class="container mx-auto px-6 animate-on-scroll"><div class="text-center mb-12"><h2 class="text-4xl md:text-5xl font-black mb-4"><span class="gradient-text">هل لديك فكرة مشروع؟</span> لنبدأ الحديث!</h2><p class="text-lg text-[var(--text-secondary)] max-w-3xl mx-auto">نحن متحمسون لسماع أفكارك. املأ النموذج أدناه أو تواصل معنا مباشرة، وسنقوم بالرد عليك في أقرب وقت ممكن.</p></div>
+                <div class="bg-[var(--bg-secondary)] rounded-2xl shadow-xl p-8 lg:p-12 max-w-5xl mx-auto">
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                        <div><form id="contact-form" method="POST"><div class="mb-5"><label for="name" class="block mb-2 text-sm font-medium text-[var(--text-primary)]">الاسم الكامل</label><input type="text" id="name" class="bg-[var(--bg-primary)] border-2 border-[var(--border-color)] text-[var(--text-primary)] text-sm rounded-lg focus:ring-2 focus:ring-[var(--color-accent-end)] focus:border-[var(--color-accent-end)] block w-full p-3 transition-all duration-300" placeholder="اسمك الكامل" required></div><div class="mb-5"><label for="email" class="block mb-2 text-sm font-medium text-[var(--text-primary)]">البريد الإلكتروني</label><input type="email" id="email" class="bg-[var(--bg-primary)] border-2 border-[var(--border-color)] text-[var(--text-primary)] text-sm rounded-lg focus:ring-2 focus:ring-[var(--color-accent-end)] focus:border-[var(--color-accent-end)] block w-full p-3 transition-all duration-300" placeholder="your.email@example.com" required></div><div class="mb-5"><label for="subject" class="block mb-2 text-sm font-medium text-[var(--text-primary)]">الموضوع</label><input type="text" id="subject" class="bg-[var(--bg-primary)] border-2 border-[var(--border-color)] text-[var(--text-primary)] text-sm rounded-lg focus:ring-2 focus:ring-[var(--color-accent-end)] focus:border-[var(--color-accent-end)] block w-full p-3 transition-all duration-300" placeholder="استفسار عن مشروع جديد" required></div><div class="mb-2"><label for="message" class="block mb-2 text-sm font-medium text-[var(--text-primary)]">رسالتك (صف لنا فكرتك)</label><textarea id="message" rows="6" class="bg-[var(--bg-primary)] border-2 border-[var(--border-color)] text-[var(--text-primary)] text-sm rounded-lg focus:ring-2 focus:ring-[var(--color-accent-end)] focus:border-[var(--color-accent-end)] block w-full p-3 transition-all duration-300" placeholder="مثال: أريد تطبيقًا لتوصيل الطلبات من المطاعم..."></textarea></div><div class="mb-6"><button type="button" id="enhance-button" class="w-full text-blue-700 dark:text-blue-300 bg-blue-100 dark:bg-blue-900/40 hover:bg-blue-200 dark:hover:bg-blue-900/60 focus:ring-4 focus:outline-none focus:ring-blue-300 font-bold rounded-lg text-sm px-5 py-2.5 text-center transition duration-300 flex items-center justify-center gap-2"><span id="button-text">✨ تحسين الطلب بالذكاء الاصطناعي</span><div id="loader" class="loader hidden"></div></button><p id="ai-error" class="text-red-500 text-xs mt-2 text-center hidden"></p></div><button type="submit" class="w-full text-white gradient-button font-medium rounded-lg text-lg px-5 py-3.5 text-center shadow-lg transform hover:scale-105">إرسال الرسالة</button></form></div>
+                        <div class="flex flex-col justify-center"><div><h3 class="text-2xl font-bold mb-6">معلومات الاتصال</h3><div class="flex items-center mb-5"><div class="flex-shrink-0 h-12 w-12 bg-blue-100 dark:bg-gray-700 text-[var(--color-accent-start)] rounded-full flex items-center justify-center"><svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M1.75 3h20.5a.75.75 0 0 1 .75.75v16.5a.75.75 0 0 1-.75.75H1.75a.75.75 0 0 1-.75-.75V3.75A.75.75 0 0 1 1.75 3ZM2.5 4.5v.227l9.5 6.333 9.5-6.333V4.5Zm0 15h19V6.354l-9.324 6.216a.75.75 0 0 1-.852 0L2.5 6.354Z"/></svg></div><div class="mr-4"><h4 class="font-semibold">البريد الإلكتروني</h4><p class="text-[var(--text-secondary)]">lylwyt777@gmail.com</p></div></div><div class="flex items-center mb-5"><div class="flex-shrink-0 h-12 w-12 bg-blue-100 dark:bg-gray-700 text-[var(--color-accent-start)] rounded-full flex items-center justify-center"><svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M7.5 1.75a.75.75 0 0 0-1.5 0V2a3 3 0 0 0-3 3v12a3 3 0 0 0 3 3h9a3 3 0 0 0 3-3V5a3 3 0 0 0-3-3V1.75a.75.75 0 0 0-1.5 0V2H9V1.75a.75.75 0 0 0-.75-.75H7.5ZM4.5 5a1.5 1.5 0 0 1 1.5-1.5h9A1.5 1.5 0 0 1 16.5 5v12a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 4.5 17Zm4.5 5a1 1 0 1 0 0-2 1 1 0 0 0 0 2Zm-2 1a1 1 0 0 1 1-1h4a1 1 0 1 1 0 2h-4a1 1 0 0 1-1-1Z"/></svg></div><div class="mr-4"><h4 class="font-semibold">الهاتف</h4><p class="text-[var(--text-secondary)] text-left" dir="ltr">+964 787 145 0337</p></div></div><div class="flex items-center mb-5"><div class="flex-shrink-0 h-12 w-12 bg-blue-100 dark:bg-gray-700 text-[var(--color-accent-start)] rounded-full flex items-center justify-center"><svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 11.25a2.75 2.75 0 1 0 0-5.5 2.75 2.75 0 0 0 0 5.5Z"/><path fill-rule="evenodd" d="M12 1.75C7.724 1.75 4.25 5.224 4.25 9.5c0 4.904 3.828 8.423 7.21 11.64.33.315.89.315 1.22 0 3.382-3.217 7.21-6.736 7.21-11.64C19.75 5.224 16.276 1.75 12 1.75ZM5.75 9.5c0-3.452 2.798-6.25 6.25-6.25s6.25 2.798 6.25 6.25c0 3.49-2.61 6.33-5.733 9.145a.75.75 0 0 1-.634.205h-.766a.75.75 0 0 1-.634-.205C8.36 15.83 5.75 12.99 5.75 9.5Z" clip-rule="evenodd"/></svg></div><div class="mr-4"><h4 class="font-semibold">الموقع</h4><p class="text-[var(--text-secondary)]">المثنى، العراق</p></div></div></div></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 dark:bg-black text-white">
+        <div class="container mx-auto px-6 py-16">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 text-center md:text-right">
+                <div class="md:col-span-2 lg:col-span-1"><h3 class="text-3xl font-black mb-4 bg-gradient-to-r from-blue-400 to-sky-400 bg-clip-text text-transparent">WailiDevs</h3><p class="text-gray-400 leading-relaxed">متخصصون في تطوير تطبيقات أندرويد مبتكرة وعالية الجودة، نحول أفكاركم إلى واقع رقمي ملموس.</p></div>
+                <div><h4 class="text-lg font-bold mb-5 uppercase tracking-wider text-gray-400">روابط سريعة</h4><ul class="space-y-3"><li><a href="#services" class="text-gray-300 hover:text-white transition-colors duration-300">خدماتنا</a></li><li><a href="#portfolio" class="text-gray-300 hover:text-white transition-colors duration-300">أعمالنا</a></li><li><a href="#process" class="text-gray-300 hover:text-white transition-colors duration-300">منهجيتنا</a></li><li><a href="#contact" class="text-gray-300 hover:text-white transition-colors duration-300">تواصل معنا</a></li></ul></div>
+                <div><h4 class="text-lg font-bold mb-5 uppercase tracking-wider text-gray-400">تواصل معنا</h4><ul class="space-y-3"><li class="text-gray-300">lylwyt777@gmail.com</li><li class="text-gray-300" dir="ltr">+964 787 145 0337</li><li class="text-gray-300">المثنى، العراق</li></ul></div>
+                <div><h4 class="text-lg font-bold mb-5 uppercase tracking-wider text-gray-400">تابعنا</h4><div class="flex justify-center md:justify-start space-x-5 rtl:space-x-reverse"><a href="#" class="text-gray-400 hover:text-white transition-transform duration-300 transform hover:scale-110"><svg class="w-7 h-7" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg></a><a href="#" class="text-gray-400 hover:text-white transition-transform duration-300 transform hover:scale-110"><svg class="w-7 h-7" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg></a><a href="https://www.instagram.com/o9cc0/" target="_blank" class="text-gray-400 hover:text-white transition-transform duration-300 transform hover:scale-110"><svg class="w-7 h-7" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07...z"/></svg></a></div></div>
+            </div>
+            <div class="mt-12 border-t border-gray-700 pt-8 text-center text-gray-500 text-sm"><p>جميع الحقوق محفوظة © <span id="copyright-year">2025</span> لـ <span class="font-bold text-gray-300">SAJJAD.WailiDevs</span></p><p>تم التطوير بحب وشغف في العراق</p></div>
+        </div>
+    </footer>
+
+    <!-- JavaScript Logic -->
+    <script type="module">
+        // --- Theme Switcher Logic ---
+        const themeToggleButtons = document.querySelectorAll('#theme-toggle, #theme-toggle-mobile');
+        const lightIcons = document.querySelectorAll('#theme-toggle-light-icon, #theme-toggle-light-icon-mobile');
+        const darkIcons = document.querySelectorAll('#theme-toggle-dark-icon, #theme-toggle-dark-icon-mobile');
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                document.documentElement.classList.add('dark');
+                lightIcons.forEach(icon => icon.classList.add('hidden'));
+                darkIcons.forEach(icon => icon.classList.remove('hidden'));
+            } else {
+                document.documentElement.classList.remove('dark');
+                lightIcons.forEach(icon => icon.classList.remove('hidden'));
+                darkIcons.forEach(icon => icon.classList.add('hidden'));
+            }
+        };
+        const savedTheme = localStorage.getItem('theme');
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const currentTheme = savedTheme ? savedTheme : (prefersDark ? 'dark' : 'light');
+        applyTheme(currentTheme);
+        themeToggleButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const newTheme = document.documentElement.classList.contains('dark') ? 'light' : 'dark';
+                localStorage.setItem('theme', newTheme);
+                applyTheme(newTheme);
+            });
+        });
+        
+        // --- Mobile Menu Logic ---
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const navLinks = document.querySelectorAll('#mobile-menu a, #header a[href^="#"]');
+        mobileMenuButton.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
+        navLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                if (!mobileMenu.classList.contains('hidden')) {
+                    mobileMenu.classList.add('hidden');
+                }
+            });
+        });
+
+        // --- Animate on Scroll Logic ---
+        const animatedElements = document.querySelectorAll('.animate-on-scroll');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1 });
+        animatedElements.forEach(el => observer.observe(el));
+
+        // --- Copyright Year ---
+        document.getElementById('copyright-year').textContent = new Date().getFullYear();
+
+        // --- Gemini API: Idea Generator ---
+        const generateIdeasButton = document.getElementById('generate-ideas-button');
+        const ideaKeywordInput = document.getElementById('idea-keyword');
+        const ideasOutput = document.getElementById('ideas-output');
+        const ideaLoader = document.getElementById('idea-loader');
+        const ideaButtonText = document.getElementById('idea-button-text');
+        const ideaError = document.getElementById('idea-error');
+        generateIdeasButton.addEventListener('click', async () => {
+            const keyword = ideaKeywordInput.value;
+            if (!keyword.trim()) {
+                ideaError.textContent = 'الرجاء إدخال كلمة مفتاحية أولاً.';
+                ideaError.classList.remove('hidden');
+                return;
+            }
+            ideaError.classList.add('hidden');
+            ideaLoader.classList.remove('hidden');
+            ideaButtonText.classList.add('hidden');
+            generateIdeasButton.disabled = true;
+            ideasOutput.innerHTML = '';
+            const apiKey = ""; // Leave empty
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+            const prompt = `Based on the keyword "${keyword}", generate 3 creative and innovative mobile app ideas in Arabic. For each idea, provide a catchy name and a one-sentence description. **IMPORTANT: Format the output as a raw JSON array string without any markdown formatting (no \`\`\`json).** The JSON array should contain objects, where each object has "name" and "description" keys. Example: [{"name": "اسم التطبيق", "description": "وصف التطبيق"}]`;
+            
+            const payload = {
+                contents: [{ parts: [{ text: prompt }] }]
+            };
+
+            try {
+                const response = await fetch(apiUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+                if (!response.ok) throw new Error(`API request failed with status ${response.status}`);
+                const result = await response.json();
+                if (result.candidates && result.candidates[0].content.parts.length > 0) {
+                    const textResponse = result.candidates[0].content.parts[0].text;
+                    const ideas = JSON.parse(textResponse);
+                    ideas.forEach((idea, index) => {
+                        const ideaCard = `
+                            <div class="card-hover-effect bg-[var(--bg-secondary)] p-6 rounded-2xl shadow-lg transition-all duration-300 animate-on-scroll" style="transition-delay: ${index * 100}ms;">
+                                <h4 class="text-xl font-bold mb-2 text-[var(--color-accent-start)]">${idea.name}</h4>
+                                <p class="text-[var(--text-secondary)]">${idea.description}</p>
+                            </div>
+                        `;
+                        ideasOutput.innerHTML += ideaCard;
+                    });
+                    document.querySelectorAll('#ideas-output .animate-on-scroll').forEach(el => {
+                        el.classList.remove('is-visible');
+                        observer.observe(el);
+                    });
+                } else {
+                    throw new Error('No content received from API.');
+                }
+            } catch (error) {
+                console.error('Gemini Idea Gen Error:', error);
+                ideaError.textContent = 'حدث خطأ أثناء توليد الأفكار. الرجاء المحاولة مرة أخرى.';
+                ideaError.classList.remove('hidden');
+            } finally {
+                ideaLoader.classList.add('hidden');
+                ideaButtonText.classList.remove('hidden');
+                generateIdeasButton.disabled = false;
+            }
+        });
+
+        // --- Gemini API: Tech Stack Recommender ---
+        const getStackButton = document.getElementById('get-stack-button');
+        const techDescription = document.getElementById('tech-description');
+        const stackOutput = document.getElementById('stack-output');
+        const stackLoader = document.getElementById('stack-loader');
+        const stackButtonText = document.getElementById('stack-button-text');
+        const stackError = document.getElementById('stack-error');
+
+        getStackButton.addEventListener('click', async () => {
+            const description = techDescription.value;
+            if (!description.trim()) {
+                stackError.textContent = 'الرجاء وصف فكرة تطبيقك أولاً.';
+                stackError.classList.remove('hidden');
+                return;
+            }
+            stackError.classList.add('hidden');
+            stackLoader.classList.remove('hidden');
+            stackButtonText.classList.add('hidden');
+            getStackButton.disabled = true;
+            stackOutput.innerHTML = '';
+
+            const apiKey = ""; // Leave empty
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+            const prompt = `As an expert Android software architect, analyze the following app description and recommend a suitable technology stack. The response must be in Arabic. **IMPORTANT: Format the output as a raw JSON object string without any markdown formatting (no \`\`\`json).** The JSON object should have keys: "frontend", "backend", "database", and "extra_apis". Each key should have an object with "name" and "reason" properties.
+
+App Description: "${description}"`;
+
+            const payload = {
+                contents: [{ parts: [{ text: prompt }] }]
+            };
+
+            try {
+                const response = await fetch(apiUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+                if (!response.ok) throw new Error(`API request failed with status ${response.status}`);
+                const result = await response.json();
+
+                if (result.candidates && result.candidates[0].content.parts.length > 0) {
+                    const textResponse = result.candidates[0].content.parts[0].text;
+                    const stack = JSON.parse(textResponse);
+                    const stackHtml = `
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="bg-[var(--bg-secondary)] p-6 rounded-xl shadow-md">
+                                <h4 class="text-lg font-bold mb-2">Frontend (الواجهة الأمامية)</h4>
+                                <p><strong class="text-[var(--color-accent-start)]">${stack.frontend.name}:</strong> ${stack.frontend.reason}</p>
+                            </div>
+                             <div class="bg-[var(--bg-secondary)] p-6 rounded-xl shadow-md">
+                                <h4 class="text-lg font-bold mb-2">Backend (الواجهة الخلفية)</h4>
+                                <p><strong class="text-[var(--color-accent-start)]">${stack.backend.name}:</strong> ${stack.backend.reason}</p>
+                            </div>
+                             <div class="bg-[var(--bg-secondary)] p-6 rounded-xl shadow-md">
+                                <h4 class="text-lg font-bold mb-2">Database (قاعدة البيانات)</h4>
+                                <p><strong class="text-[var(--color-accent-start)]">${stack.database.name}:</strong> ${stack.database.reason}</p>
+                            </div>
+                             <div class="bg-[var(--bg-secondary)] p-6 rounded-xl shadow-md">
+                                <h4 class="text-lg font-bold mb-2">APIs & Services (خدمات إضافية)</h4>
+                                <p><strong class="text-[var(--color-accent-start)]">${stack.extra_apis.name}:</strong> ${stack.extra_apis.reason}</p>
+                            </div>
+                        </div>
+                    `;
+                    stackOutput.innerHTML = stackHtml;
+                } else {
+                    throw new Error('No content received from API.');
+                }
+            } catch (error) {
+                console.error('Gemini Stack Gen Error:', error);
+                stackError.textContent = 'حدث خطأ أثناء ترشيح التقنيات. الرجاء المحاولة مرة أخرى.';
+                stackError.classList.remove('hidden');
+            } finally {
+                stackLoader.classList.add('hidden');
+                stackButtonText.classList.remove('hidden');
+                getStackButton.disabled = false;
+            }
+        });
+
+        // --- Gemini API: Contact Form Enhancer ---
+        const enhanceButton = document.getElementById('enhance-button');
+        const messageTextarea = document.getElementById('message');
+        const loader = document.getElementById('loader');
+        const buttonText = document.getElementById('button-text');
+        const aiError = document.getElementById('ai-error');
+        enhanceButton.addEventListener('click', async () => {
+            const userInput = messageTextarea.value;
+            if (!userInput.trim()) {
+                aiError.textContent = 'الرجاء كتابة فكرة المشروع أولاً.';
+                aiError.classList.remove('hidden');
+                return;
+            }
+            aiError.classList.add('hidden');
+            loader.classList.remove('hidden');
+            buttonText.classList.add('hidden');
+            enhanceButton.disabled = true;
+            messageTextarea.disabled = true;
+            const apiKey = ""; // Leave empty
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+            const prompt = `You are an expert mobile app product manager... Here is the client's idea:\n---\n${userInput}\n---`;
+            const payload = { contents: [{ parts: [{ text: prompt }] }] };
+            try {
+                const response = await fetch(apiUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+                if (!response.ok) throw new Error(`API request failed with status ${response.status}`);
+                const result = await response.json();
+                if (result.candidates && result.candidates[0].content.parts.length > 0) {
+                    const enhancedText = result.candidates[0].content.parts[0].text;
+                    messageTextarea.value = enhancedText;
+                    messageTextarea.style.height = 'auto';
+                    messageTextarea.style.height = messageTextarea.scrollHeight + 'px';
+                } else {
+                    throw new Error('No content received from API.');
+                }
+            } catch (error) {
+                console.error('Gemini API Error:', error);
+                aiError.textContent = 'حدث خطأ أثناء تحسين النص. الرجاء المحاولة مرة أخرى.';
+                aiError.classList.remove('hidden');
+            } finally {
+                loader.classList.add('hidden');
+                buttonText.classList.remove('hidden');
+                enhanceButton.disabled = false;
+                messageTextarea.disabled = false;
+            }
+        });
+    </script>
+</body>
+</html>
